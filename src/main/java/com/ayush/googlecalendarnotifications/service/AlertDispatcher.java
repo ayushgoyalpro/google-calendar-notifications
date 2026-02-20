@@ -38,7 +38,7 @@ public class AlertDispatcher {
         List<AlertTask> alerts = storage.getAlertsForMinute(currentMinuteEpoch);
         alerts.forEach(alert -> {
             log.info("[{}] {}: {}", Instant.now(), alert.getType(), alert.getTitle());
-            ntfy(alert.getTitle(), alert.getType());
+            ntfy(alert);
             wsNotify(alert);
         });
     }
@@ -47,8 +47,8 @@ public class AlertDispatcher {
         messagingTemplate.convertAndSend("/topic/meetings", alert);
     }
 
-    private void ntfy(String title, AlertType type) {
-        String message = type + ": " + title;
+    private void ntfy(AlertTask alert) {
+        String message = alert.getTitle() + " - " + alert.getType().message();
         try (HttpClient client = HttpClient.newHttpClient()) {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://ntfy.sh/" + ntfyTopic))
