@@ -5,12 +5,7 @@ target/
 !**/src/test/**/target/
 
 # IntelliJ IDEA
-.idea/workspace.xml
-.idea/shelf/
-.idea/queries/
-.idea/dataSources/
-.idea/dataSources.local.xml
-.idea/httpRequests/
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -43,3 +38,6 @@ build/
 
 # macOS
 .DS_Store
+
+# Claude
+.claude/
