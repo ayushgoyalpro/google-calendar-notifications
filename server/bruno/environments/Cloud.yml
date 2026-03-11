@@ -2,3 +2,5 @@ name: Cloud
 variables:
   - name: host
     value: https://google-calendar-notifications.onrender.com
+  - secret: true
+    name: your_key

@@ -5,7 +5,11 @@ info:
 
 http:
   method: POST
-  url: "{{host}}/test/trigger"
+  url: "{{host}}/test/trigger?key={{your_key}}"
+  params:
+    - name: key
+      value: "{{your_key}}"
+      type: query
   auth: inherit
 
 settings:
