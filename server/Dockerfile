@@ -22,4 +22,4 @@ RUN ./mvnw clean package -DskipTests
 EXPOSE 8080
 
 # Run the built JAR with the Spring 'cloud' profile
-CMD ["java", "-jar", "target/google-calendar-notifications-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "target/server-0.0.1-SNAPSHOT.jar"]
