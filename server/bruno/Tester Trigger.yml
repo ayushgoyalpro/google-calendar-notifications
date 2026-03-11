@@ -1,0 +1,15 @@
+info:
+  name: Tester Trigger
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{host}}/test/trigger"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

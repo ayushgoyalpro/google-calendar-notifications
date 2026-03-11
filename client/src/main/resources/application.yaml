@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: gcn-client
+
+server:
+  port: 8081
+
+gcn-server:
+  receive-timeout-seconds: 5
+  url: wss://google-calendar-notifications.onrender.com/ws-calendar
+  personal-key: ${USER_KEY}

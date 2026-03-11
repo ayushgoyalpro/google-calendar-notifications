@@ -1,0 +1,58 @@
+#!/bin/bash
+
+INSTALL_DIR="$HOME/.gcn-client"
+JAR_PATH="$INSTALL_DIR/gcn-client.jar"
+ENV_FILE="$INSTALL_DIR/.env"
+LOG_FILE="/tmp/gcn-client.log"
+
+start_app() {
+    if pgrep -f "$JAR_PATH" > /dev/null; then
+        echo "GCN Client is already running."
+        return 1
+    fi
+
+    if [ ! -f "$JAR_PATH" ]; then
+        echo "Error: JAR not found at $JAR_PATH"
+        echo "Please run the installer first."
+        return 1
+    fi
+
+    if [ ! -f "$ENV_FILE" ]; then
+        echo "Error: .env file not found at $ENV_FILE"
+        echo "Please run the installer first."
+        return 1
+    fi
+
+    export $(grep -v '^#' "$ENV_FILE" | xargs)
+
+    java -jar "$JAR_PATH" >> "$LOG_FILE" 2>&1 &
+    disown
+
+    echo "GCN Client started. Logs: $LOG_FILE"
+}
+
+stop_app() {
+    PID=$(pgrep -f "$JAR_PATH" | head -n 1)
+
+    if [ -z "$PID" ]; then
+        echo "GCN Client is not running."
+    else
+        kill -9 "$PID"
+        echo "GCN Client (PID $PID) stopped."
+    fi
+}
+
+status_app() {
+    if pgrep -f "$JAR_PATH" > /dev/null; then
+        echo "GCN Client is running."
+    else
+        echo "GCN Client is not running."
+    fi
+}
+
+case "$1" in
+    start)  start_app ;;
+    stop)   stop_app ;;
+    status) status_app ;;
+    *)      echo "Usage: gcn {start|stop|status}" ;;
+esac

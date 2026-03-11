@@ -1,0 +1,45 @@
+# Maven
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# IntelliJ IDEA
+.idea/workspace.xml
+.idea/shelf/
+.idea/queries/
+.idea/dataSources/
+.idea/dataSources.local.xml
+.idea/httpRequests/
+*.iws
+*.iml
+*.ipr
+
+# STS / Eclipse
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# VS Code
+.vscode/
+
+# Environment / secrets
+.env
+*.env.local
+
+# macOS
+.DS_Store
