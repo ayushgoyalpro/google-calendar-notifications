@@ -3,7 +3,6 @@
 set -e
 
 INSTALL_DIR="$HOME/.gcn-client"
-BIN_DIR="/usr/local/bin"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 echo "=== GCN Client Installer ==="
@@ -61,19 +60,27 @@ echo "Configuration saved to $INSTALL_DIR/.env"
 
 # --- Install gcn script ---
 echo ""
-if [ -w "$BIN_DIR" ]; then
-    cp "$SCRIPT_DIR/gcn" "$BIN_DIR/gcn"
-    chmod +x "$BIN_DIR/gcn"
-    echo "Installed gcn command to $BIN_DIR/gcn"
+cp "$SCRIPT_DIR/gcn" "$INSTALL_DIR/gcn"
+chmod +x "$INSTALL_DIR/gcn"
+echo "Installed gcn command to $INSTALL_DIR/gcn"
+
+# --- Add INSTALL_DIR to PATH in .zshrc ---
+ZSHRC="$HOME/.zshrc"
+PATH_LINE="export PATH=\"\$HOME/.gcn-client:\$PATH\""
+
+if ! grep -qF '.gcn-client' "$ZSHRC" 2>/dev/null; then
+    echo "" >> "$ZSHRC"
+    echo "# Added by GCN Client installer" >> "$ZSHRC"
+    echo "$PATH_LINE" >> "$ZSHRC"
+    echo "Added $INSTALL_DIR to PATH in $ZSHRC"
 else
-    echo "Installing to $BIN_DIR requires admin privileges."
-    sudo cp "$SCRIPT_DIR/gcn" "$BIN_DIR/gcn"
-    sudo chmod +x "$BIN_DIR/gcn"
-    echo "Installed gcn command to $BIN_DIR/gcn"
+    echo "$INSTALL_DIR already present in $ZSHRC, skipping."
 fi
 
 echo ""
 echo "=== Done ==="
+echo ""
+echo "Restart your terminal or run 'source ~/.zshrc' for the gcn command to be available."
 echo ""
 echo "Run 'gcn start' to start the client."
 echo "Run 'gcn stop' to stop it."
