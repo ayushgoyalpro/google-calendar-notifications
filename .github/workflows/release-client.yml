@@ -23,8 +23,7 @@ jobs:
           cache: 'maven'
 
       - name: Build JAR
-        working-directory: client
-        run: ./mvnw package -DskipTests
+        run: ./mvnw package -DskipTests -f client/pom.xml
 
       - name: Prepare release artifact
         id: artifact
