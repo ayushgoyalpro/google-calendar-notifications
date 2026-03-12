@@ -1,0 +1,91 @@
+class Gcn < Formula
+  desc "Google Calendar Notifications client for macOS"
+  homepage "https://github.com/REPO_PLACEHOLDER"
+  url "https://github.com/REPO_PLACEHOLDER/releases/download/VERSION_PLACEHOLDER/gcn-client-VERSION_PLACEHOLDER.jar"
+  sha256 "SHA256_PLACEHOLDER"
+  version "VERSION_NUM_PLACEHOLDER"
+  license "MIT"
+
+  depends_on "openjdk@21"
+
+  def install
+    libexec.install "gcn-client-VERSION_PLACEHOLDER.jar" => "gcn-client.jar"
+
+    (bin/"gcn").write <<~EOS
+      #!/bin/bash
+      export JAVA_HOME="#{Formula["openjdk@21"].opt_prefix}"
+      INSTALL_DIR="$HOME/.gcn-client"
+      JAR_PATH="#{libexec}/gcn-client.jar"
+      ENV_FILE="$INSTALL_DIR/.env"
+      LOG_FILE="/tmp/gcn-client.log"
+
+      setup() {
+        mkdir -p "$INSTALL_DIR"
+        if [ ! -f "$ENV_FILE" ]; then
+          echo "=== GCN Client First-Time Setup ==="
+          echo "Get your User Key from: https://google-calendar-notifications.onrender.com/key"
+          echo ""
+          read -rp "Enter your User Key: " USER_KEY_INPUT
+          if [ -z "$USER_KEY_INPUT" ]; then
+            echo "Error: User Key cannot be empty."
+            exit 1
+          fi
+          echo "USER_KEY=$USER_KEY_INPUT" > "$ENV_FILE"
+          echo "Saved to $ENV_FILE"
+        fi
+      }
+
+      start_app() {
+        if pgrep -f "gcn-client.jar" > /dev/null; then
+          echo "GCN Client is already running."
+          return 1
+        fi
+        setup
+        export $(grep -v '^#' "$ENV_FILE" | xargs)
+        "${JAVA_HOME}/bin/java" -jar "$JAR_PATH" >> "$LOG_FILE" 2>&1 &
+        disown
+        echo "GCN Client started. Logs: $LOG_FILE"
+      }
+
+      stop_app() {
+        PID=$(pgrep -f "gcn-client.jar" | head -n 1)
+        if [ -z "$PID" ]; then
+          echo "GCN Client is not running."
+        else
+          kill "$PID"
+          echo "GCN Client (PID $PID) stopped."
+        fi
+      }
+
+      status_app() {
+        if pgrep -f "gcn-client.jar" > /dev/null; then
+          echo "GCN Client is running."
+        else
+          echo "GCN Client is not running."
+        fi
+      }
+
+      case "$1" in
+        start)  start_app ;;
+        stop)   stop_app ;;
+        status) status_app ;;
+        setup)  setup ;;
+        *)      echo "Usage: gcn {start|stop|status|setup}" ;;
+      esac
+    EOS
+  end
+
+  def caveats
+    <<~EOS
+      Run `gcn start` to launch the client.
+      On first start, you will be prompted for your User Key.
+      Get one at: https://google-calendar-notifications.onrender.com/key
+
+      Logs are written to /tmp/gcn-client.log
+    EOS
+  end
+
+  test do
+    assert_predicate bin/"gcn", :exist?
+  end
+end
