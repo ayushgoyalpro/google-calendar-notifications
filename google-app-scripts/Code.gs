@@ -1,4 +1,5 @@
 const USER_KEY = "REPLACE_ME"; // Paste your key from /key here
+const CALENDAR_ID = "primary";
 
 function syncDailyMeetings() {
   const scriptCache = CacheService.getScriptCache();
@@ -8,25 +9,30 @@ function syncDailyMeetings() {
   const endOfDay = new Date();
   endOfDay.setHours(23, 59, 59, 999);
 
-  // 1. Get all events from today
-  const events = CalendarApp.getDefaultCalendar().getEvents(startOfDay, endOfDay);
+  // 1. Fetch all events for today using Advanced Calendar API v3
+  const events = [];
+  let pageToken = undefined;
+  do {
+    const params = {
+      timeMin: startOfDay.toISOString(),
+      timeMax: endOfDay.toISOString(),
+      singleEvents: true,
+      orderBy: "startTime",
+      maxResults: 2500,
+    };
+    if (pageToken) params.pageToken = pageToken;
 
-  // 2. Map to Meeting DTO shape
-  const meetings = events.map(event => ({
-    id: event.getId(),
-    title: event.getTitle(),
-    startTime: event.getStartTime().toISOString(),
-    endTime: event.getEndTime().toISOString(),
-    location: event.getLocation(),
-    description: event.getDescription(),
-    status: event.getMyStatus().toString(),
-    lastUpdated: event.getLastUpdated().getTime()
-  }));
+    const response = Calendar.Events.list(CALENDAR_ID, params);
+    if (response.items) {
+      events.push(...response.items);
+    }
+    pageToken = response.nextPageToken;
+  } while (pageToken);
 
-  // 3. Change detection: hash only the meetings so key changes don't cause false diffs
-  const meetingsString = JSON.stringify(meetings);
+  // 2. Change detection: hash the raw event list
+  const eventsString = JSON.stringify(events);
   const currentHash = Utilities.base64Encode(
-    Utilities.computeDigest(Utilities.DigestAlgorithm.MD5, meetingsString)
+    Utilities.computeDigest(Utilities.DigestAlgorithm.MD5, eventsString)
   );
   const cachedHash = scriptCache.get("last_calendar_hash");
 
@@ -35,21 +41,24 @@ function syncDailyMeetings() {
     return;
   }
 
-  // 4. Wrap into SyncRequest and POST
-  const payload = JSON.stringify({ key: USER_KEY, meetings: meetings });
+  // 3. POST the raw event objects as-is
+  const payload = JSON.stringify({ key: USER_KEY, meetings: events });
 
   const options = {
-    method: 'post',
-    contentType: 'application/json',
+    method: "post",
+    contentType: "application/json",
     payload: payload,
     muteHttpExceptions: true,
     headers: {
-      "ngrok-skip-browser-warning": "true"
-    }
+      "ngrok-skip-browser-warning": "true",
+    },
   };
 
   try {
-    const response = UrlFetchApp.fetch("https://google-calendar-notifications.onrender.com/api/sync", options);
+    const response = UrlFetchApp.fetch(
+      "https://google-calendar-notifications.onrender.com/api/sync",
+      options
+    );
     console.log("Status Code: " + response.getResponseCode());
     console.log("Server Response: " + response.getContentText());
     scriptCache.put("last_calendar_hash", currentHash, 21600); // Cache for 6 hours
