@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Alert {
     private String title;
-    private AlertType type;
+    private AlertOffset offset;
 }

@@ -3,10 +3,13 @@ package com.ayush.googlecalendarnotifications.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 public class Alert {
     private String key;
-    private String title;
-    private AlertType type;
+    private Meeting meeting;
+    private AlertOffset offset;
+    private Set<Channel> channels;
 }

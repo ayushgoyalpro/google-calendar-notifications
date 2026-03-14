@@ -1,8 +1,8 @@
 package com.ayush.googlecalendarnotifications.service;
 
 import com.ayush.googlecalendarnotifications.dto.Alert;
+import com.ayush.googlecalendarnotifications.dto.Channel;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,50 +15,50 @@ import java.net.http.HttpResponse;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
 @EnableScheduling
 public class AlertDispatcher {
 
-    private final AlertStorage storage;
+    private final AlertStore storage;
     private final SimpMessagingTemplate messagingTemplate;
 
-    public AlertDispatcher(AlertStorage storage, SimpMessagingTemplate messagingTemplate) {
+    public AlertDispatcher(AlertStore storage, SimpMessagingTemplate messagingTemplate) {
         this.storage = storage;
         this.messagingTemplate = messagingTemplate;
     }
 
-    @Scheduled(cron = "0 * * * * *") // Runs exactly at the start of every minute
+    @Scheduled(cron = "0 * * * * *")
     public void dispatch() {
         long currentMinuteEpoch = Instant.now().truncatedTo(ChronoUnit.MINUTES).getEpochSecond() / 60;
         List<Alert> alerts = storage.getAlertsForMinute(currentMinuteEpoch);
         alerts.forEach(alert -> {
-            log.info("[{}] {}: {}", Instant.now(), alert.getType(), alert.getTitle());
-            ntfy(alert);
-            wsNotify(alert);
+            log.info("[{}] {}m before: {}", Instant.now(), alert.getOffset().minutesBefore(), alert.getMeeting().getTitle());
+            Set<Channel> channels = alert.getChannels();
+            if (channels.contains(Channel.NTFY))      ntfy(alert);
+            if (channels.contains(Channel.WEBSOCKET)) wsNotify(alert);
         });
     }
 
     public void wsNotify(Alert alert) {
-        messagingTemplate.convertAndSend("/topic/" + alert.getKey(), alert);
+        messagingTemplate.convertAndSend("/topic/" + alert.getKey(), alert.getMeeting());
     }
 
     private void ntfy(Alert alert) {
-        String message = alert.getTitle() + " - " + alert.getType().message();
+        String message = alert.getMeeting().getTitle() + " - " + alert.getOffset().message();
         try (HttpClient client = HttpClient.newHttpClient()) {
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://ntfy.sh/" + alert.getKey()))
-                .POST(HttpRequest.BodyPublishers.ofString(message))
-                .header("Title", "Calendar Alert")
-                .header("Priority", "5") // Makes it pop up immediately
-                .header("Tags", "calendar,bell") // Adds emojis to the notification
-                .build();
-
+                    .uri(URI.create("https://ntfy.sh/" + alert.getKey()))
+                    .POST(HttpRequest.BodyPublishers.ofString(message))
+                    .header("Title", "Calendar Alert")
+                    .header("Priority", "5")
+                    .header("Tags", "calendar,bell")
+                    .build();
             client.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (Exception e) {
             log.error("Failed to send notification: {}", e.getMessage(), e);
         }
     }
 }
-

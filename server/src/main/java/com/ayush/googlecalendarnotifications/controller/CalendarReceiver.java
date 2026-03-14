@@ -1,7 +1,7 @@
 package com.ayush.googlecalendarnotifications.controller;
 
 import com.ayush.googlecalendarnotifications.dto.SyncRequest;
-import com.ayush.googlecalendarnotifications.service.AlertStorage;
+import com.ayush.googlecalendarnotifications.service.AlertStore;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class CalendarReceiver {
 
-    private final AlertStorage storage;
+    private final AlertStore storage;
 
-    public CalendarReceiver(AlertStorage storage) {
+    public CalendarReceiver(AlertStore storage) {
         this.storage = storage;
     }
 
