@@ -1,4 +1,4 @@
-package com.ayush.googlecalendarnotifications.dto;
+package com.ayush.gcn.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

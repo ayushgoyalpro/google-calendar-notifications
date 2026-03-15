@@ -1,6 +1,6 @@
-package com.ayush.googlecalendarnotifications.service;
+package com.ayush.gcn.service;
 
-import com.ayush.googlecalendarnotifications.dto.UserPreferences;
+import com.ayush.gcn.dto.UserPreferences;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ConcurrentHashMap;

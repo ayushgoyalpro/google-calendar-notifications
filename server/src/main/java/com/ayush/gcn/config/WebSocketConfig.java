@@ -1,4 +1,4 @@
-package com.ayush.googlecalendarnotifications.config;
+package com.ayush.gcn.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

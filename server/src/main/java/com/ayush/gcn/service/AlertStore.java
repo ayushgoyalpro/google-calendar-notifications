@@ -1,11 +1,11 @@
-package com.ayush.googlecalendarnotifications.service;
+package com.ayush.gcn.service;
 
-import com.ayush.googlecalendarnotifications.dto.Alert;
-import com.ayush.googlecalendarnotifications.dto.AlertOffset;
-import com.ayush.googlecalendarnotifications.dto.Meeting;
-import com.ayush.googlecalendarnotifications.dto.SyncRequest;
-import com.ayush.googlecalendarnotifications.dto.UserPreferences;
-import com.ayush.googlecalendarnotifications.dto.UserSchedule;
+import com.ayush.gcn.dto.Alert;
+import com.ayush.gcn.dto.AlertOffset;
+import com.ayush.gcn.dto.Meeting;
+import com.ayush.gcn.dto.SyncRequest;
+import com.ayush.gcn.dto.UserPreferences;
+import com.ayush.gcn.dto.UserSchedule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

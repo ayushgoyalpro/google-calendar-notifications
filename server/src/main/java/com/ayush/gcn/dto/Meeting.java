@@ -1,4 +1,4 @@
-package com.ayush.googlecalendarnotifications.dto;
+package com.ayush.gcn.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,7 +1,7 @@
-package com.ayush.googlecalendarnotifications.service;
+package com.ayush.gcn.service;
 
-import com.ayush.googlecalendarnotifications.dto.Alert;
-import com.ayush.googlecalendarnotifications.dto.Channel;
+import com.ayush.gcn.dto.Alert;
+import com.ayush.gcn.dto.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -35,14 +35,21 @@ public class AlertDispatcher {
         long currentMinuteEpoch = Instant.now().truncatedTo(ChronoUnit.MINUTES).getEpochSecond() / 60;
         List<Alert> alerts = storage.getAlertsForMinute(currentMinuteEpoch);
         alerts.forEach(alert -> {
-            log.info("[{}] {}m before: {}", Instant.now(), alert.getOffset().minutesBefore(), alert.getMeeting().getTitle());
-            Set<Channel> channels = alert.getChannels();
-            if (channels.contains(Channel.NTFY))      ntfy(alert);
-            if (channels.contains(Channel.WEBSOCKET)) wsNotify(alert);
+            log.info("[{}] {}m before: {}",
+                     Instant.now(),
+                     alert.getOffset().minutesBefore(),
+                     alert.getMeeting().getTitle());
+            fire(alert);
         });
     }
 
-    public void wsNotify(Alert alert) {
+    public void fire(Alert alert) {
+        Set<Channel> channels = alert.getChannels();
+        if (channels.contains(Channel.NTFY)) ntfy(alert);
+        if (channels.contains(Channel.WEBSOCKET)) wsNotify(alert);
+    }
+
+    private void wsNotify(Alert alert) {
         messagingTemplate.convertAndSend("/topic/" + alert.getKey(), alert.getMeeting());
     }
 
@@ -50,12 +57,12 @@ public class AlertDispatcher {
         String message = alert.getMeeting().getTitle() + " - " + alert.getOffset().message();
         try (HttpClient client = HttpClient.newHttpClient()) {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://ntfy.sh/" + alert.getKey()))
-                    .POST(HttpRequest.BodyPublishers.ofString(message))
-                    .header("Title", "Calendar Alert")
-                    .header("Priority", "5")
-                    .header("Tags", "calendar,bell")
-                    .build();
+                                             .uri(URI.create("https://ntfy.sh/" + alert.getKey()))
+                                             .POST(HttpRequest.BodyPublishers.ofString(message))
+                                             .header("Title", "Calendar Alert")
+                                             .header("Priority", "5")
+                                             .header("Tags", "calendar,bell")
+                                             .build();
             client.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (Exception e) {
             log.error("Failed to send notification: {}", e.getMessage(), e);

@@ -1,4 +1,4 @@
-package com.ayush.googlecalendarnotifications;
+package com.ayush.gcn;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

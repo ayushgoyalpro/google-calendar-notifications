@@ -1,7 +1,7 @@
-package com.ayush.googlecalendarnotifications.controller;
+package com.ayush.gcn.controller;
 
-import com.ayush.googlecalendarnotifications.dto.SyncRequest;
-import com.ayush.googlecalendarnotifications.service.AlertStore;
+import com.ayush.gcn.dto.SyncRequest;
+import com.ayush.gcn.service.AlertStore;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
