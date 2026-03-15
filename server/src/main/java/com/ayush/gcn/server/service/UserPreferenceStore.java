@@ -1,6 +1,6 @@
-package com.ayush.gcn.service;
+package com.ayush.gcn.server.service;
 
-import com.ayush.gcn.dto.UserPreferences;
+import com.ayush.gcn.server.dto.UserPreferences;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ConcurrentHashMap;

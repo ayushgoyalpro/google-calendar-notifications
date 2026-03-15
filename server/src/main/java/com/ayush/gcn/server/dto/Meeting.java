@@ -1,4 +1,4 @@
-package com.ayush.gcn.dto;
+package com.ayush.gcn.server.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

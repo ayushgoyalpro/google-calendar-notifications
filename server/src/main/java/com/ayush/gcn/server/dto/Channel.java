@@ -1,4 +1,4 @@
-package com.ayush.gcn.dto;
+package com.ayush.gcn.server.dto;
 
 public enum Channel {
     WEBSOCKET,

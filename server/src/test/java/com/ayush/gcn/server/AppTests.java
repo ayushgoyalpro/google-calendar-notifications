@@ -1,4 +1,4 @@
-package com.ayush.gcn;
+package com.ayush.gcn.server;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,7 +1,7 @@
-package com.ayush.gcnclient.service;
+package com.ayush.gcn.client.service;
 
-import com.ayush.gcnclient.alert.Alert;
-import com.ayush.gcnclient.handlers.AlertHandler;
+import com.ayush.gcn.client.alert.Alert;
+import com.ayush.gcn.client.handlers.AlertHandler;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.ayush.gcnclient.alert;
+package com.ayush.gcn.client.alert;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

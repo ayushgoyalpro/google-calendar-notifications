@@ -1,11 +1,11 @@
-package com.ayush.gcn.service;
+package com.ayush.gcn.server.service;
 
-import com.ayush.gcn.dto.Alert;
-import com.ayush.gcn.dto.AlertOffset;
-import com.ayush.gcn.dto.Meeting;
-import com.ayush.gcn.dto.SyncRequest;
-import com.ayush.gcn.dto.UserPreferences;
-import com.ayush.gcn.dto.UserSchedule;
+import com.ayush.gcn.server.dto.Alert;
+import com.ayush.gcn.server.dto.AlertOffset;
+import com.ayush.gcn.server.dto.Meeting;
+import com.ayush.gcn.server.dto.SyncRequest;
+import com.ayush.gcn.server.dto.UserPreferences;
+import com.ayush.gcn.server.dto.UserSchedule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,6 @@
-package com.ayush.gcnclient.handlers;
+package com.ayush.gcn.client.handlers;
 
-import com.ayush.gcnclient.alert.Alert;
+import com.ayush.gcn.client.alert.Alert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

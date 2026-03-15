@@ -1,7 +1,7 @@
-package com.ayush.gcn.service;
+package com.ayush.gcn.server.service;
 
-import com.ayush.gcn.dto.Alert;
-import com.ayush.gcn.dto.Channel;
+import com.ayush.gcn.server.dto.Alert;
+import com.ayush.gcn.server.dto.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;

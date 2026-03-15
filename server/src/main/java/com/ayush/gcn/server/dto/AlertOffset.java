@@ -1,4 +1,4 @@
-package com.ayush.gcnclient.alert;
+package com.ayush.gcn.server.dto;
 
 public record AlertOffset(int minutesBefore) {
 

@@ -1,7 +1,7 @@
-package com.ayush.gcn.controller;
+package com.ayush.gcn.server.controller;
 
-import com.ayush.gcn.dto.SyncRequest;
-import com.ayush.gcn.service.AlertStore;
+import com.ayush.gcn.server.dto.SyncRequest;
+import com.ayush.gcn.server.service.AlertStore;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

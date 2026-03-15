@@ -1,4 +1,4 @@
-package com.ayush.gcnclient;
+package com.ayush.gcn.client;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

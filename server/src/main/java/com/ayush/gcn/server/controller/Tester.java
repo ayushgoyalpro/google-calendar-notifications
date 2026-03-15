@@ -1,10 +1,10 @@
-package com.ayush.gcn.controller;
+package com.ayush.gcn.server.controller;
 
-import com.ayush.gcn.dto.Alert;
-import com.ayush.gcn.dto.AlertOffset;
-import com.ayush.gcn.dto.Channel;
-import com.ayush.gcn.dto.Meeting;
-import com.ayush.gcn.service.AlertDispatcher;
+import com.ayush.gcn.server.dto.Alert;
+import com.ayush.gcn.server.dto.AlertOffset;
+import com.ayush.gcn.server.dto.Channel;
+import com.ayush.gcn.server.dto.Meeting;
+import com.ayush.gcn.server.service.AlertDispatcher;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
