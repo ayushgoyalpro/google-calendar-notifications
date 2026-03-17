@@ -5,11 +5,30 @@ info:
 
 http:
   method: POST
-  url: "{{host}}/test/trigger?key={{your_key}}"
-  params:
-    - name: key
-      value: "{{your_key}}"
-      type: query
+  url: "{{host}}/tester/trigger"
+  body:
+    type: json
+    data: |-
+      {
+        "key": "{{your_key}}",
+        "channel": "WEBSOCKET",
+        "offset": 5,
+        "meeting": {
+          "summary": "Team Standup",
+          "hangoutLink": "https://meet.google.com/abc-defg-hij",
+          "start": {
+            "dateTime": "2026-03-17T10:00:00+05:30",
+            "timeZone": "Asia/Kolkata"
+          },
+          "attendees": [
+            {
+              "displayName": "Conference Room A",
+              "resource": true,
+              "responseStatus": "accepted"
+            }
+          ]
+        }
+      }
   auth: inherit
 
 settings:
