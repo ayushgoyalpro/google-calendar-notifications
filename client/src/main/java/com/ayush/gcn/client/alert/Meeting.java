@@ -1,4 +1,4 @@
-package com.ayush.gcn.server.dto;
+package com.ayush.gcn.client.alert;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * Maps the Google Calendar API v3 Event resource.
- * <a href="https://developers.google.com/workspace/calendar/api/v3/reference/events#resource">DOCS</a>
+ * https://developers.google.com/workspace/calendar/api/v3/reference/events#resource
  */
 @Data
 @NoArgsConstructor

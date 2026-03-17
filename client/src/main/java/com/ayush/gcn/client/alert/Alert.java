@@ -2,12 +2,14 @@ package com.ayush.gcn.client.alert;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class Alert {
-    private String title;
+    private String key;
+    private Meeting meeting;
     private AlertOffset offset;
+    private Set<Channel> channels;
 }

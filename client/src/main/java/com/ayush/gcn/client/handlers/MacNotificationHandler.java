@@ -31,7 +31,7 @@ public class MacNotificationHandler implements AlertHandler {
     }
 
     private static String getScript(Alert alert, String iconPath) {
-        String message = alert.getTitle() + " - " + alert.getOffset().message() + "\n\n\n\n\n\n\n";
+        String message = alert.getMeeting().getTitle() + " - " + alert.getOffset().message() + "\n\n\n\n\n\n\n";
         String iconLine = (iconPath != null) ? String.format("with icon POSIX file \"%s\"", iconPath) : "with icon caution";
 
         return String.format("""

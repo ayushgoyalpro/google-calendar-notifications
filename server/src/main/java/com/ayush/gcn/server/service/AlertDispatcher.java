@@ -50,7 +50,7 @@ public class AlertDispatcher {
     }
 
     private void wsNotify(Alert alert) {
-        messagingTemplate.convertAndSend("/topic/" + alert.getKey(), alert.getMeeting());
+        messagingTemplate.convertAndSend("/topic/" + alert.getKey(), alert);
     }
 
     private void ntfy(Alert alert) {

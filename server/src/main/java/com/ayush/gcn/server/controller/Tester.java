@@ -26,11 +26,11 @@ public class Tester {
     public String trigger(@RequestBody TriggerRequest request) {
         alertDispatcher.fire(new Alert(request.key(),
                                        request.meeting(),
-                                       new AlertOffset(0),
+                                       new AlertOffset(request.offset),
                                        EnumSet.of(request.channel())));
         return "Triggered " + request.channel() + " for: " + request.meeting().getTitle();
     }
 
-    public record TriggerRequest(String key, Meeting meeting, Channel channel) {
+    public record TriggerRequest(String key, Meeting meeting, Channel channel, Integer offset) {
     }
 }
