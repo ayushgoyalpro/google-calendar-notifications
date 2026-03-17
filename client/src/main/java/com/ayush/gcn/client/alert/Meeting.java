@@ -64,7 +64,7 @@ public class Meeting {
     private FocusTimeProperties focusTimeProperties;
     private BirthdayProperties birthdayProperties;
 
-    // ── Convenience accessors used by AlertStorage ────────────────────────────
+    // ── Convenience accessors ─────────────────────────────────────────────────
 
     /** Returns the event title (v3 field is "summary"). */
     public String getTitle() {
@@ -78,6 +78,23 @@ public class Meeting {
     public String getStartTime() {
         if (start == null) return null;
         return start.getDateTime() != null ? start.getDateTime() : start.getDate();
+    }
+
+    /** Returns the Google Meet link, or null if none. */
+    public String getMeetLink() {
+        return hangoutLink;
+    }
+
+    /** Returns room names from resource attendees, comma-joined. Null if none. */
+    public String getRoomInfo() {
+        if (attendees == null) return null;
+        String rooms = attendees.stream()
+                .filter(a -> Boolean.TRUE.equals(a.getResource()))
+                .map(Attendee::getDisplayName)
+                .filter(name -> name != null && !name.isBlank())
+                .reduce((a, b) -> a + ", " + b)
+                .orElse(null);
+        return rooms;
     }
 
     // ── Inner types ───────────────────────────────────────────────────────────

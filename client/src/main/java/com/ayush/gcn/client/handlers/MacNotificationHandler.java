@@ -31,34 +31,72 @@ public class MacNotificationHandler implements AlertHandler {
     }
 
     private static String getScript(Alert alert, String iconPath) {
-        String message = alert.getMeeting().getTitle() + " - " + alert.getOffset().message() + "\n\n\n\n\n\n\n";
+        var meeting = alert.getMeeting();
+        String roomInfo = meeting.getRoomInfo();
+        String meetLink = meeting.getMeetLink();
+
+        String line1 = meeting.getTitle();
+        String line2 = (roomInfo != null) ? roomInfo : "";
+        String line3 = alert.getOffset().message();
+        String message = line1 + "\n" + line2 + "\n" + line3 + "\n\n\n\n\n";
+
         String iconLine = (iconPath != null) ? String.format("with icon POSIX file \"%s\"", iconPath) : "with icon caution";
 
-        return String.format("""
-            set x to output volume of (get volume settings)
-            try
-                set volume output volume 80
-                do shell script "afplay /System/Library/Sounds/Glass.aiff"
-            end try
-            set volume output volume x
-            
-            tell application "System Events"
-                set frontmost of process "Finder" to true
-            end tell
-            
-            tell application "Finder"
-                activate
-                set myDialog to display dialog "%s" ¬
-                    with title "Meeting Alert" ¬
-                    buttons {"Dismiss", "Open Calendar"} ¬
-                    default button "Open Calendar" ¬
-                    %s
-            end tell
-            
-            if button returned of myDialog is "Open Calendar" then
-                open location "https://calendar.google.com"
-            end if
-            """, message, iconLine);
+        if (meetLink != null) {
+            return String.format("""
+                set x to output volume of (get volume settings)
+                try
+                    set volume output volume 80
+                    do shell script "afplay /System/Library/Sounds/Glass.aiff"
+                end try
+                set volume output volume x
+
+                tell application "System Events"
+                    set frontmost of process "Finder" to true
+                end tell
+
+                tell application "Finder"
+                    activate
+                    set myDialog to display dialog "%s" ¬
+                        with title "Meeting Alert" ¬
+                        buttons {"Dismiss", "Open Calendar", "Join Google Meet"} ¬
+                        default button "Join Google Meet" ¬
+                        %s
+                end tell
+
+                if button returned of myDialog is "Join Google Meet" then
+                    open location "%s"
+                else if button returned of myDialog is "Open Calendar" then
+                    open location "https://calendar.google.com"
+                end if
+                """, message, iconLine, meetLink);
+        } else {
+            return String.format("""
+                set x to output volume of (get volume settings)
+                try
+                    set volume output volume 80
+                    do shell script "afplay /System/Library/Sounds/Glass.aiff"
+                end try
+                set volume output volume x
+
+                tell application "System Events"
+                    set frontmost of process "Finder" to true
+                end tell
+
+                tell application "Finder"
+                    activate
+                    set myDialog to display dialog "%s" ¬
+                        with title "Meeting Alert" ¬
+                        buttons {"Dismiss", "Open Calendar"} ¬
+                        default button "Open Calendar" ¬
+                        %s
+                end tell
+
+                if button returned of myDialog is "Open Calendar" then
+                    open location "https://calendar.google.com"
+                end if
+                """, message, iconLine);
+        }
     }
 
     private String resolveAppIconPath() {
